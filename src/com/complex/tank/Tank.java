@@ -7,11 +7,16 @@ public class Tank {
     private int y = 200;
     private Dir dir = Dir.LIFT; //坦克方向
     private static final int SPEED = 10;//坦克速度
+    private boolean moving = false; //坦克移动状态
 
     public Tank(int x, int y, Dir dir) {
         this.x = x;
         this.y = y;
         this.dir = dir;
+    }
+
+    public void setMoving(boolean moving) {
+        this.moving = moving;
     }
 
     public Dir getDir() {
@@ -24,6 +29,11 @@ public class Tank {
 
     public void paint(Graphics g) {
         g.fillRect(x, y, 50, 50);
+        move();
+    }
+
+    public void move(){
+        if(!moving) return;
         switch (dir){
             case LIFT:
                 x -= SPEED;
