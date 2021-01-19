@@ -5,9 +5,15 @@ import java.awt.*;
 public class Tank {
     private int x = 200;
     private int y = 200;
-    private Dir dir = Dir.LIFT; //坦克方向
-    private static final int SPEED = 10;//坦克速度
+    private Dir dir; //坦克方向
+    private static final int SPEED = 5;//坦克速度
     private boolean moving = false; //坦克移动状态
+
+    public Tank(){
+        this.x = 200;
+        this.y = 200;
+        this.dir = Dir.RIGHT;
+    }
 
     public Tank(int x, int y, Dir dir) {
         this.x = x;
