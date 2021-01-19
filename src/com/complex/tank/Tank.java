@@ -9,16 +9,14 @@ public class Tank {
     private static final int SPEED = 5;//坦克速度
     private boolean moving = false; //坦克移动状态
 
-    public Tank(){
-        this.x = 200;
-        this.y = 200;
-        this.dir = Dir.RIGHT;
-    }
+    private TankFrame tf = null;
 
-    public Tank(int x, int y, Dir dir) {
+
+    public Tank(int x, int y, Dir dir,TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.tf = tf;
     }
 
     public void setMoving(boolean moving) {
@@ -41,9 +39,9 @@ public class Tank {
         move();
     }
 
-    public void move(){
-        if(!moving) return;
-        switch (dir){
+    public void move() {
+        if (!moving) return;
+        switch (dir) {
             case LIFT:
                 x -= SPEED;
                 break;
@@ -57,6 +55,10 @@ public class Tank {
                 y += SPEED;
                 break;
         }
+    }
+
+    public void fire() {
+        tf.bullet = new Bullet(this.x+20,this.y+20,this.dir);
     }
 
 }
