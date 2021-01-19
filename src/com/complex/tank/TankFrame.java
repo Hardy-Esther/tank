@@ -9,8 +9,11 @@ import java.awt.event.WindowEvent;
 public class TankFrame extends Frame {
     int x = 200;
     int y = 200;
-    public TankFrame(){
-        this.setSize(800,600);
+    Dir dir = Dir.LIFT; //坦克方向
+    private static final int SPEED = 10;//坦克速度
+
+    public TankFrame() {
+        this.setSize(800, 600);
         this.setResizable(false);
         this.setTitle("tank war");
         this.setVisible(true);
@@ -22,25 +25,40 @@ public class TankFrame extends Frame {
         });
         this.addKeyListener(new MyKeyListener());
     }
+
     @Override
-    public void paint(Graphics g){
-        g.fillRect(x,y,50,50);
-        x += 10;
+    public void paint(Graphics g) {
+        g.fillRect(x, y, 50, 50);
+        switch (dir){
+            case LIFT:
+                x -= SPEED;
+                break;
+            case RIGHT:
+                x += SPEED;
+                break;
+            case UP:
+                y -= SPEED;
+                break;
+            case DOWN:
+                y += SPEED;
+                break;
+        }
     }
 
-    class MyKeyListener extends KeyAdapter{
+    class MyKeyListener extends KeyAdapter {
         boolean bL = false;
         boolean bU = false;
         boolean bR = false;
         boolean bD = false;
+
         @Override
-        public void keyPressed(KeyEvent e){
+        public void keyPressed(KeyEvent e) {
             //x += 20;
             //调用repaint()方法会默认调用paint
             //repaint();
             //System.out.println("key pressed");
             int key = e.getKeyCode();
-            switch (key){
+            switch (key) {
                 case KeyEvent.VK_LEFT:
                     bL = true;
                     break;
@@ -56,21 +74,20 @@ public class TankFrame extends Frame {
                 default:
                     break;
             }
-
-
+            setMainTankDir();
         }
 
         @Override
-        public void keyReleased(KeyEvent e){
+        public void keyReleased(KeyEvent e) {
             //System.out.println("key released");
             int key = e.getKeyCode();
-            switch (key){
+            switch (key) {
                 case KeyEvent.VK_LEFT:
-                    bL =false;
+                    bL = false;
                     break;
                 case KeyEvent.VK_RIGHT:
-                     bR = false;
-                     break;
+                    bR = false;
+                    break;
                 case KeyEvent.VK_UP:
                     bU = false;
                     break;
@@ -79,7 +96,14 @@ public class TankFrame extends Frame {
                 default:
                     break;
             }
-            
+            setMainTankDir();
+        }
+
+        private void setMainTankDir() {
+            if (bL) dir = Dir.LIFT;
+            if (bR) dir = Dir.RIGHT;
+            if (bU) dir = Dir.UP;
+            if (bD) dir = Dir.DOWN;
         }
 
     }
