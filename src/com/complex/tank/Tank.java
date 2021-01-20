@@ -8,6 +8,10 @@ public class Tank {
     private Dir dir; //坦克方向
     private static final int SPEED = 5;//坦克速度
     private boolean moving = false; //坦克移动状态
+    private boolean living = true;
+
+    public static int WIDTH = ResourceMgr.tankU.getWidth();
+    public static int HEIGHT = ResourceMgr.tankU.getHeight();
 
     private TankFrame tf = null;
 
@@ -27,16 +31,22 @@ public class Tank {
         return dir;
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
     public void setDir(Dir dir) {
         this.dir = dir;
     }
 
     public void paint(Graphics g) {
-        /*Color c = g.getColor();
-        g.setColor(Color.YELLOW);
-        g.fillRect(x, y, 50, 50);
-        g.setColor(c);
-        */
+        if (!living){
+            tf.tanks.remove(this);
+        }
         switch (dir) {
             case LIFT:
                 g.drawImage(ResourceMgr.tankL, x, y, null);
@@ -73,6 +83,8 @@ public class Tank {
             case DOWN:
                 y += SPEED;
                 break;
+            default:
+                break;
         }
     }
 
@@ -96,4 +108,7 @@ public class Tank {
 
     }
 
+    public void die(){
+        this.living = false;
+    }
 }
