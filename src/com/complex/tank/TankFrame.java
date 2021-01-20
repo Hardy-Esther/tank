@@ -16,7 +16,8 @@ public class TankFrame extends Frame {
 
     List<Tank> tanks = new ArrayList<>();
 
-    Explode e = new Explode(100,100,this);
+    List<Explode> explodes = new ArrayList<>();
+
 
     static final int GAME_WIDTH = 800, GAME_HEIGHT = 600;
 
@@ -57,14 +58,16 @@ public class TankFrame extends Frame {
         g.setColor(c);
         myTank.paint(g);
 
-        e.paint(g);
-
         for (int i = 0; i < bullets.size(); i++) {
             bullets.get(i).paint(g);
         }
 
         for (int i = 0; i < tanks.size(); i++) {
             tanks.get(i).paint(g);
+        }
+
+        for (int i = 0; i < explodes.size(); i++) {
+            explodes.get(i).paint(g);
         }
 
         for (int i = 0; i < bullets.size(); i++) {

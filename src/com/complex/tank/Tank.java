@@ -1,5 +1,6 @@
 package com.complex.tank;
 
+import javax.sound.sampled.AudioSystem;
 import java.awt.*;
 import java.util.Random;
 
@@ -8,7 +9,7 @@ public class Tank {
     private int y = 200;
     private Dir dir; //坦克方向
     private static final int SPEED = 5;//坦克速度
-    private boolean moving = true; //坦克移动状态
+    private boolean moving = false; //坦克移动状态
     private boolean living = true;
     private Group group;
     public static int WIDTH = ResourceMgr.tankU.getWidth();
@@ -127,6 +128,7 @@ public class Tank {
 
     public void die() {
         this.living = false;
+        this.tf.explodes.add(new Explode(this.x,this.y,this.tf));
     }
 
 }
