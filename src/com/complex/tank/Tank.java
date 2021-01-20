@@ -37,18 +37,18 @@ public class Tank {
         g.fillRect(x, y, 50, 50);
         g.setColor(c);
         */
-        switch (dir){
+        switch (dir) {
             case LIFT:
-                g.drawImage(ResourceMgr.tankL,x,y,null);
+                g.drawImage(ResourceMgr.tankL, x, y, null);
                 break;
             case RIGHT:
-                g.drawImage(ResourceMgr.tankR,x,y,null);
+                g.drawImage(ResourceMgr.tankR, x, y, null);
                 break;
             case UP:
-                g.drawImage(ResourceMgr.tankU,x,y,null);
+                g.drawImage(ResourceMgr.tankU, x, y, null);
                 break;
             case DOWN:
-                g.drawImage(ResourceMgr.tankD,x,y,null);
+                g.drawImage(ResourceMgr.tankD, x, y, null);
                 break;
             default:
                 break;
@@ -77,7 +77,23 @@ public class Tank {
     }
 
     public void fire() {
-        tf.bullets.add(new Bullet(this.x + 20, this.y + 20, this.dir, tf));
+        switch (dir) {
+            case LIFT:
+                tf.bullets.add(new Bullet(this.x, this.y + 22, this.dir, tf));
+                break;
+            case RIGHT:
+                tf.bullets.add(new Bullet(this.x + 40, this.y + 23, this.dir, tf));
+                break;
+            case UP:
+                tf.bullets.add(new Bullet(this.x + 20, this.y, this.dir, tf));
+                break;
+            case DOWN:
+                tf.bullets.add(new Bullet(this.x + 18, this.y + 40, this.dir, tf));
+                break;
+            default:
+                break;
+        }
+
     }
 
 }
