@@ -1,26 +1,38 @@
 package com.complex.tank;
 
 import java.awt.*;
+import java.util.Random;
 
 public class Tank {
     private int x = 200;
     private int y = 200;
     private Dir dir; //坦克方向
     private static final int SPEED = 5;//坦克速度
-    private boolean moving = false; //坦克移动状态
+    private boolean moving = true; //坦克移动状态
     private boolean living = true;
-
+    private Group group;
     public static int WIDTH = ResourceMgr.tankU.getWidth();
     public static int HEIGHT = ResourceMgr.tankU.getHeight();
 
+
     private TankFrame tf = null;
 
+    private Random random = new Random();
 
     public Tank(int x, int y, Dir dir, TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.tf = tf;
+        this.group = Group.BLUE;
+    }
+
+    public Tank(int x, int y, Dir dir, Group group, TankFrame tf) {
+        this.x = x;
+        this.y = y;
+        this.dir = dir;
+        this.tf = tf;
+        this.group = group;
     }
 
     public void setMoving(boolean moving) {
@@ -39,12 +51,16 @@ public class Tank {
         return y;
     }
 
+    public Group getGroup() {
+        return this.group;
+    }
+
     public void setDir(Dir dir) {
         this.dir = dir;
     }
 
     public void paint(Graphics g) {
-        if (!living){
+        if (!living) {
             tf.tanks.remove(this);
         }
         switch (dir) {
@@ -86,21 +102,22 @@ public class Tank {
             default:
                 break;
         }
+        if (random.nextInt(10) > 8) this.fire();
     }
 
     public void fire() {
         switch (dir) {
             case LIFT:
-                tf.bullets.add(new Bullet(this.x, this.y + 22, this.dir, tf));
+                tf.bullets.add(new Bullet(this.x, this.y + 22, this.dir, this.group, tf));
                 break;
             case RIGHT:
-                tf.bullets.add(new Bullet(this.x + 40, this.y + 23, this.dir, tf));
+                tf.bullets.add(new Bullet(this.x + 40, this.y + 23, this.dir, this.group, tf));
                 break;
             case UP:
-                tf.bullets.add(new Bullet(this.x + 20, this.y, this.dir, tf));
+                tf.bullets.add(new Bullet(this.x + 20, this.y, this.dir, this.group, tf));
                 break;
             case DOWN:
-                tf.bullets.add(new Bullet(this.x + 18, this.y + 40, this.dir, tf));
+                tf.bullets.add(new Bullet(this.x + 18, this.y + 40, this.dir, this.group, tf));
                 break;
             default:
                 break;
@@ -108,7 +125,8 @@ public class Tank {
 
     }
 
-    public void die(){
+    public void die() {
         this.living = false;
     }
+
 }
