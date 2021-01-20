@@ -12,7 +12,7 @@ public class Tank {
     private TankFrame tf = null;
 
 
-    public Tank(int x, int y, Dir dir,TankFrame tf) {
+    public Tank(int x, int y, Dir dir, TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
@@ -32,10 +32,29 @@ public class Tank {
     }
 
     public void paint(Graphics g) {
-        Color c = g.getColor();
+        /*Color c = g.getColor();
         g.setColor(Color.YELLOW);
         g.fillRect(x, y, 50, 50);
         g.setColor(c);
+        */
+        switch (dir){
+            case LIFT:
+                g.drawImage(ResourceMgr.tankL,x,y,null);
+                break;
+            case RIGHT:
+                g.drawImage(ResourceMgr.tankR,x,y,null);
+                break;
+            case UP:
+                g.drawImage(ResourceMgr.tankU,x,y,null);
+                break;
+            case DOWN:
+                g.drawImage(ResourceMgr.tankD,x,y,null);
+                break;
+            default:
+                break;
+        }
+
+
         move();
     }
 
@@ -58,7 +77,7 @@ public class Tank {
     }
 
     public void fire() {
-        tf.bullets.add(new Bullet(this.x+20,this.y+20,this.dir,tf));
+        tf.bullets.add(new Bullet(this.x + 20, this.y + 20, this.dir, tf));
     }
 
 }
