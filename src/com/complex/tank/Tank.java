@@ -15,6 +15,7 @@ public class Tank {
     public static int WIDTH = ResourceMgr.redTankU.getWidth();
     public static int HEIGHT = ResourceMgr.redTankU.getHeight();
 
+    Rectangle rect = new Rectangle();
 
     private TankFrame tf = null;
 
@@ -26,13 +27,14 @@ public class Tank {
         this.dir = dir;
         this.tf = tf;
         this.group = Group.BLUE;
+        rect.x = this.x;
+        rect.y = this.y;
+        rect.width = WIDTH;
+        rect.height = HEIGHT;
     }
 
     public Tank(int x, int y, Dir dir, Group group, TankFrame tf) {
-        this.x = x;
-        this.y = y;
-        this.dir = dir;
-        this.tf = tf;
+        this(x,y,dir,tf);
         this.group = group;
     }
 
@@ -103,15 +105,21 @@ public class Tank {
             default:
                 break;
         }
-        if (x > TankFrame.GAME_WIDTH - Tank.WIDTH) x = TankFrame.GAME_WIDTH - Tank.WIDTH;
-        if (y > TankFrame.GAME_HEIGHT - Tank.HEIGHT) y = TankFrame.GAME_HEIGHT - Tank.HEIGHT;
-        if (x < 0) x = 0;
-        if (y < 25) y = 25;
+
         if (group == Group.BLUE) {
             if (random.nextInt(50) > 45) this.fire();
             if (random.nextInt(50) > 48) this.randomDir();
         }
+        boundsCheck();
+        rect.x = this.x;
+        rect.y = this.y;
+    }
 
+    private void boundsCheck(){
+        if (x > TankFrame.GAME_WIDTH - Tank.WIDTH -5) x = TankFrame.GAME_WIDTH - Tank.WIDTH-5;
+        if (y > TankFrame.GAME_HEIGHT - Tank.HEIGHT-5) y = TankFrame.GAME_HEIGHT - Tank.HEIGHT-5;
+        if (x < 5) x = 5;
+        if (y < 30) y = 30;
     }
 
     private void randomDir() {
