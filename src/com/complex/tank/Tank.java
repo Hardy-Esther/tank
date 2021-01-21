@@ -12,8 +12,8 @@ public class Tank {
     private boolean moving = true; //坦克移动状态
     private boolean living = true;
     private Group group;
-    public static int WIDTH = ResourceMgr.tankU.getWidth();
-    public static int HEIGHT = ResourceMgr.tankU.getHeight();
+    public static int WIDTH = ResourceMgr.redTankU.getWidth();
+    public static int HEIGHT = ResourceMgr.redTankU.getHeight();
 
 
     private TankFrame tf = null;
@@ -66,16 +66,16 @@ public class Tank {
         }
         switch (dir) {
             case LIFT:
-                g.drawImage(ResourceMgr.tankL, x, y, null);
+                g.drawImage(this.group == Group.BLUE ? ResourceMgr.blueTankL : ResourceMgr.redTankL, x, y, null);
                 break;
             case RIGHT:
-                g.drawImage(ResourceMgr.tankR, x, y, null);
+                g.drawImage(this.group == Group.BLUE ? ResourceMgr.blueTankR : ResourceMgr.redTankR, x, y, null);
                 break;
             case UP:
-                g.drawImage(ResourceMgr.tankU, x, y, null);
+                g.drawImage(this.group == Group.BLUE ? ResourceMgr.blueTankU : ResourceMgr.redTankU, x, y, null);
                 break;
             case DOWN:
-                g.drawImage(ResourceMgr.tankD, x, y, null);
+                g.drawImage(this.group == Group.BLUE ? ResourceMgr.blueTankD : ResourceMgr.redTankD, x, y, null);
                 break;
             default:
                 break;
@@ -105,7 +105,17 @@ public class Tank {
         }
         if (x > TankFrame.GAME_WIDTH - Tank.WIDTH) x = TankFrame.GAME_WIDTH - Tank.WIDTH;
         if (y > TankFrame.GAME_HEIGHT - Tank.HEIGHT) y = TankFrame.GAME_HEIGHT - Tank.HEIGHT;
-        if (random.nextInt(10) > 8) this.fire();
+        if (x < 0) x = 0;
+        if (y < 25) y = 25;
+        if (group == Group.BLUE) {
+            if (random.nextInt(50) > 45) this.fire();
+            if (random.nextInt(50) > 48) this.randomDir();
+        }
+
+    }
+
+    private void randomDir() {
+        this.dir = Dir.values()[random.nextInt(4)];
     }
 
     public void fire() {
