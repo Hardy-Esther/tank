@@ -17,5 +17,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="io.netty:netty-all:4.1.9.Final" level="project" />
   </component>
 </module>

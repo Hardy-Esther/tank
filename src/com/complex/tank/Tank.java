@@ -113,6 +113,7 @@ public class Tank {
         boundsCheck();
         rect.x = this.x;
         rect.y = this.y;
+
     }
 
     private void boundsCheck(){
@@ -143,12 +144,14 @@ public class Tank {
             default:
                 break;
         }
+        if (group == Group.RED) new Thread(()->new Audio("audio/tank_fire.wav").play()).start();
 
     }
 
     public void die() {
         this.living = false;
         this.tf.explodes.add(new Explode(this.x, this.y, this.tf));
+        new Thread(()->new Audio("audio/explode.wav").play()).start();
     }
 
 }
