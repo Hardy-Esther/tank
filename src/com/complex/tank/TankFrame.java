@@ -1,27 +1,32 @@
 package com.complex.tank;
 
+import com.complex.tank.net.Client;
+import com.complex.tank.net.TankStartMovingMsg;
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
 
 public class TankFrame extends Frame {
+
+    public static final TankFrame INSTANCE = new TankFrame();
 
     Tank myTank = new Tank(200,400,Dir.UP,Group.RED,this);
 
     List<Bullet>  bullets = new ArrayList<>();
 
-    List<Tank> tanks = new ArrayList<>();
+    Map<UUID,Tank> tanks = new HashMap<>();
 
     List<Explode> explodes = new ArrayList<>();
 
 
     static final int GAME_WIDTH = 1080, GAME_HEIGHT = 720;
 
-    public TankFrame() {
+    private TankFrame() {
         this.setSize(GAME_WIDTH, GAME_HEIGHT);
         this.setResizable(false);
         this.setTitle("tank war");
@@ -62,9 +67,12 @@ public class TankFrame extends Frame {
             bullets.get(i).paint(g);
         }
 
+        tanks.values().stream().forEach((e)->e.paint(g));
+        /*
         for (int i = 0; i < tanks.size(); i++) {
             tanks.get(i).paint(g);
         }
+        */
 
         for (int i = 0; i < explodes.size(); i++) {
             explodes.get(i).paint(g);
@@ -76,6 +84,7 @@ public class TankFrame extends Frame {
             }
         }
     }
+
 
     class MyKeyListener extends KeyAdapter {
         boolean bL = false;
@@ -140,13 +149,28 @@ public class TankFrame extends Frame {
                 myTank.setMoving(false);
                 return;
             }
-            myTank.setMoving(true);
+            Dir oldDir = myTank.getDir();
             if (bL) myTank.setDir(Dir.LIFT);
             if (bR) myTank.setDir(Dir.RIGHT);
             if (bU) myTank.setDir(Dir.UP);
             if (bD) myTank.setDir(Dir.DOWN);
+            if(!myTank.getMoving() || !oldDir.equals(myTank.getDir())) Client.INSTANCE.send(new TankStartMovingMsg(myTank));
+            myTank.setMoving(true);
         }
 
     }
+
+    public Tank findTankByUUID(UUID id) {
+        return tanks.get(id);
+    }
+
+    public Tank getMainTank() {
+        return this.myTank;
+    }
+
+    public void addTank(Tank t) {
+        tanks.put(t.getId(), t);
+    }
+
 
 }

@@ -1,8 +1,10 @@
 package com.complex.tank;
 
-import javax.sound.sampled.AudioSystem;
+import com.complex.tank.net.TankJoinMsg;
+
 import java.awt.*;
 import java.util.Random;
+import java.util.UUID;
 
 public class Tank {
     private int x = 200;
@@ -12,6 +14,9 @@ public class Tank {
     private boolean moving = true; //坦克移动状态
     private boolean living = true;
     private Group group;
+
+    private UUID id = UUID.randomUUID();
+
     public static int WIDTH = ResourceMgr.redTankU.getWidth();
     public static int HEIGHT = ResourceMgr.redTankU.getHeight();
 
@@ -34,8 +39,23 @@ public class Tank {
     }
 
     public Tank(int x, int y, Dir dir, Group group, TankFrame tf) {
-        this(x,y,dir,tf);
+        this(x, y, dir, tf);
         this.group = group;
+    }
+
+    public Tank(TankJoinMsg msg) {
+        this.x = msg.x;
+        this.y = msg.y;
+        this.dir = msg.dir;
+        this.moving = msg.moving;
+        this.group = msg.group;
+        this.id = msg.id;
+
+        rect.x = this.x;
+        rect.y = this.y;
+        rect.width = WIDTH;
+        rect.height = HEIGHT;
+
     }
 
     public void setMoving(boolean moving) {
@@ -52,6 +72,14 @@ public class Tank {
 
     public int getY() {
         return y;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 
     public Group getGroup() {
@@ -116,9 +144,9 @@ public class Tank {
 
     }
 
-    private void boundsCheck(){
-        if (x > TankFrame.GAME_WIDTH - Tank.WIDTH -5) x = TankFrame.GAME_WIDTH - Tank.WIDTH-5;
-        if (y > TankFrame.GAME_HEIGHT - Tank.HEIGHT-5) y = TankFrame.GAME_HEIGHT - Tank.HEIGHT-5;
+    private void boundsCheck() {
+        if (x > TankFrame.GAME_WIDTH - Tank.WIDTH - 5) x = TankFrame.GAME_WIDTH - Tank.WIDTH - 5;
+        if (y > TankFrame.GAME_HEIGHT - Tank.HEIGHT - 5) y = TankFrame.GAME_HEIGHT - Tank.HEIGHT - 5;
         if (x < 5) x = 5;
         if (y < 30) y = 30;
     }
@@ -144,14 +172,21 @@ public class Tank {
             default:
                 break;
         }
-        if (group == Group.RED) new Thread(()->new Audio("audio/tank_fire.wav").play()).start();
+        if (group == Group.RED) new Thread(() -> new Audio("audio/tank_fire.wav").play()).start();
 
     }
 
     public void die() {
         this.living = false;
         this.tf.explodes.add(new Explode(this.x, this.y, this.tf));
-        new Thread(()->new Audio("audio/explode.wav").play()).start();
+        new Thread(() -> new Audio("audio/explode.wav").play()).start();
     }
 
+    public UUID getId() {
+        return id;
+    }
+
+    public Boolean getMoving(){
+        return moving;
+    }
 }

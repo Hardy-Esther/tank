@@ -1,22 +1,26 @@
 package com.complex.tank;
 
-import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import com.complex.tank.net.Client;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        TankFrame tf = new TankFrame();
-        //初始化敌方tank
-        int initTankCount = PropertyMgr.getInt("initTankCount");
-        for (int i = 0; i < initTankCount; i++) {
-            tf.tanks.add(new Tank(50 + i * 150, 200, Dir.DOWN, tf));
-        }
+        TankFrame tf = TankFrame.INSTANCE;
+        tf.setVisible(true);
+
         new Thread(()->new Audio("audio/war1.wav").loop()).start();
-        while (true) {
-            Thread.sleep(50);
-            tf.repaint();
-        }
+        new Thread(()-> {
+            while(true) {
+                try {
+                    Thread.sleep(25);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                tf.repaint();
+            }
+        }).start();
+
+        Client.INSTANCE.connect();
+
 
     }
 }
