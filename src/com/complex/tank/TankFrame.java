@@ -2,6 +2,7 @@ package com.complex.tank;
 
 import com.complex.tank.net.Client;
 import com.complex.tank.net.TankStartMovingMsg;
+import com.complex.tank.net.TankStopMsg;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -77,11 +78,11 @@ public class TankFrame extends Frame {
         for (int i = 0; i < explodes.size(); i++) {
             explodes.get(i).paint(g);
         }
+        Collection<Tank> values = tanks.values();
 
         for (int i = 0; i < bullets.size(); i++) {
-            for (int j = 0; j < tanks.size(); j++){
-                bullets.get(i).collideWith(tanks.get(j));
-            }
+            for(Tank t : values )
+                bullets.get(i).collideWith(t);
         }
     }
 
@@ -146,7 +147,10 @@ public class TankFrame extends Frame {
 
         private void setMainTankDir() {
             if (!bL && !bR && !bU && !bD){
-                myTank.setMoving(false);
+                if (myTank.getMoving()){
+                    myTank.setMoving(false);
+                    Client.INSTANCE.send(new TankStopMsg(myTank));
+                }
                 return;
             }
             Dir oldDir = myTank.getDir();
