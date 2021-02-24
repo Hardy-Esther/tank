@@ -1,6 +1,7 @@
 package com.complex.tank;
 
 import java.awt.*;
+import java.util.UUID;
 
 public class Bullet {
     private static final int SPEED = 10;
@@ -9,6 +10,8 @@ public class Bullet {
     private boolean living = true;
     private TankFrame tf = null;
     private Group group;
+    private UUID id = UUID.randomUUID();
+    private UUID playerId;
 
     Rectangle rect = new Rectangle();
 
@@ -16,11 +19,12 @@ public class Bullet {
     public static int HEIGHT = ResourceMgr.bulletU.getHeight();
 
 
-    public Bullet(int x, int y, Dir dir, TankFrame tf) {
+    public Bullet(UUID playerId,int x, int y, Dir dir, TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = Group.BLUE;
+        this.playerId = playerId;
         this.tf = tf;
         rect.x = this.x;
         rect.y = this.y;
@@ -28,9 +32,37 @@ public class Bullet {
         rect.height = HEIGHT;
     }
 
-    public Bullet(int x, int y, Dir dir, Group group, TankFrame tf) {
-        this(x, y, dir, tf);
+    public Bullet(UUID playerId,int x, int y, Dir dir, Group group, TankFrame tf) {
+        this(playerId,x, y, dir, tf);
         this.group = group;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public Dir getDir() {
+        return dir;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id){
+        this.id = id;
+    }
+
+    public UUID getPlayerId() {
+        return playerId;
     }
 
     public void paint(Graphics g) {
@@ -82,7 +114,7 @@ public class Bullet {
     }
 
     public void collideWith(Tank tank) {
-        if (this.group == tank.getGroup()) return;
+        //if (this.group == tank.getGroup()) return;
         if (rect.intersects(tank.rect)) {
             tank.die();
             this.die();

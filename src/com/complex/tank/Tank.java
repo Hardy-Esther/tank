@@ -1,5 +1,7 @@
 package com.complex.tank;
 
+import com.complex.tank.net.BulletNewMsg;
+import com.complex.tank.net.Client;
 import com.complex.tank.net.TankJoinMsg;
 
 import java.awt.*;
@@ -91,9 +93,20 @@ public class Tank {
     }
 
     public void paint(Graphics g) {
+
+        if(!living) {
+            moving = false;
+            Color cc = g.getColor();
+            g.setColor(Color.WHITE);
+            g.drawRect(x, y, WIDTH, HEIGHT);
+            g.setColor(cc);
+            return;
+        }
+
+        /*
         if (!living) {
             tf.tanks.remove(this);
-        }
+        }*/
         switch (dir) {
             case LIFT:
                 g.drawImage(this.group == Group.BLUE ? ResourceMgr.blueTankL : ResourceMgr.redTankL, x, y, null);
@@ -156,21 +169,26 @@ public class Tank {
     }
 
     public void fire() {
+        Bullet bullet = null;
         switch (dir) {
             case LIFT:
-                tf.bullets.add(new Bullet(this.x, this.y + 15, this.dir, this.group, tf));
+                bullet = new Bullet(this.id,this.x, this.y + 15, this.dir, this.group, tf);
                 break;
             case RIGHT:
-                tf.bullets.add(new Bullet(this.x + 40, this.y + 15, this.dir, this.group, tf));
+                bullet =new Bullet(this.id,this.x + 40, this.y + 15, this.dir, this.group, tf);
                 break;
             case UP:
-                tf.bullets.add(new Bullet(this.x + 15, this.y, this.dir, this.group, tf));
+                bullet =new Bullet(this.id,this.x + 15, this.y, this.dir, this.group, tf);
                 break;
             case DOWN:
-                tf.bullets.add(new Bullet(this.x + 15, this.y + 40, this.dir, this.group, tf));
+                bullet =new Bullet(this.id,this.x + 15, this.y + 40, this.dir, this.group, tf);
                 break;
             default:
                 break;
+        }
+        if (bullet != null){
+            tf.bullets.add(bullet);
+            Client.INSTANCE.send(new BulletNewMsg(bullet));
         }
         if (group == Group.RED) new Thread(() -> new Audio("audio/tank_fire.wav").play()).start();
 

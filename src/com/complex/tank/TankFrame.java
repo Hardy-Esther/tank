@@ -86,6 +86,10 @@ public class TankFrame extends Frame {
         }
     }
 
+    public void addBullet(Bullet bullet) {
+        bullets.add(bullet);
+    }
+
 
     class MyKeyListener extends KeyAdapter {
         boolean bL = false;
